@@ -43,7 +43,7 @@ import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import routes from "routes";
 
 // Images
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import bgImage from "assets/images/building-scaled.jpg";
 
 function SignInBasic() {
   const [rememberMe, setRememberMe] = useState(false);
