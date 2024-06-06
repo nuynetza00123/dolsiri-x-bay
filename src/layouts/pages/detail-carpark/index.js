@@ -1,6 +1,5 @@
+import Carpark from "pages/LandingPages/detail-carpark";
 
-import SignIn from "pages/LandingPages/SignIn";
-
-export default function SignInPage() {
-  return <SignIn />;
+export default function DetailCarpark() {
+  return <Carpark />;
 }

@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
+// import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import MuiLink from "@mui/material/Link";
 
@@ -19,21 +19,53 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
-
-// Material Kit 2 React example components
-// import DefaultNavbar from "examples/Navbars/DefaultNavbar";
-// import SimpleFooter from "examples/Footers/SimpleFooter";
-
-// Material Kit 2 React page layout routes
-// import routes from "routes";
-
-// Images
 import bgImage from "assets/images/building-scaled.jpg";
+// import axios from "axios";
+import api from "api/environment";
+import Swal from "sweetalert2";
+import { QRCodeCanvas } from "qrcode.react";
 
-function SignInBasic() {
-  const [rememberMe, setRememberMe] = useState(false);
+function DetailCarpark() {
+  // const [rememberMe, setRememberMe] = useState(false);
+  const [LogCarpark, setLogCarpark] = useState("");
+  const [qrcode] = useState("This is the first line.\r\nThis is the second line");
+  const [Data, setData] = useState([]);
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  // const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const getParkingDetail = (Log) => {
+    let tempdata = {
+      search: Log,
+      lostCard: false,
+    };
+
+    api
+      .post(`Redemption/GetParkingDetail`, tempdata)
+      .then(function (res) {
+        setData(res.data);
+        console.log(Data);
+        if (Data.status == "0") {
+          Swal.fire({
+            title: Data.message,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          setLogCarpark("");
+        } else if (Data.status == "1") {
+          Swal.fire({
+            title: Data.message,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          setLogCarpark("");
+        }
+
+        // console.log(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -82,8 +114,9 @@ function SignInBasic() {
                 textAlign="center"
               >
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  Sign in
+                  PUNN
                 </MKTypography>
+
                 <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
                   <Grid item xs={2}>
                     <MKTypography component={MuiLink} href="#" variant="body1" color="white">
@@ -104,43 +137,29 @@ function SignInBasic() {
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
+                  <QRCodeCanvas value={qrcode} />
                   <MKBox mb={2}>
-                    <MKInput type="email" label="Email" fullWidth />
+                    <MKInput
+                      type="search"
+                      label="Search"
+                      value={LogCarpark}
+                      onChange={(e) => setLogCarpark(e.target.value)}
+                      fullWidth
+                    />
                   </MKBox>
-                  <MKBox mb={2}>
+                  {/* <MKBox mb={2}>
                     <MKInput type="password" label="Password" fullWidth />
-                  </MKBox>
-                  <MKBox display="flex" alignItems="center" ml={-1}>
-                    <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                    <MKTypography
-                      variant="button"
-                      fontWeight="regular"
-                      color="text"
-                      onClick={handleSetRememberMe}
-                      sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-                    >
-                      &nbsp;&nbsp;Remember me
-                    </MKTypography>
-                  </MKBox>
+                  </MKBox> */}
+
                   <MKBox mt={4} mb={1}>
-                    <MKButton variant="gradient" color="info" fullWidth>
-                      sign in
+                    <MKButton
+                      variant="gradient"
+                      color="info"
+                      onClick={() => getParkingDetail(LogCarpark)}
+                      fullWidth
+                    >
+                      search
                     </MKButton>
-                  </MKBox>
-                  <MKBox mt={3} mb={1} textAlign="center">
-                    <MKTypography variant="button" color="text">
-                      Don&apos;t have an account?{" "}
-                      <MKTypography
-                        component={Link}
-                        to="/authentication/sign-up/cover"
-                        variant="button"
-                        color="info"
-                        fontWeight="medium"
-                        textGradient
-                      >
-                        Sign up
-                      </MKTypography>
-                    </MKTypography>
                   </MKBox>
                 </MKBox>
               </MKBox>
@@ -155,4 +174,4 @@ function SignInBasic() {
   );
 }
 
-export default SignInBasic;
+export default DetailCarpark;
