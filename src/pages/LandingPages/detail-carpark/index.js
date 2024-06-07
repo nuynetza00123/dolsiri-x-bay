@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+// import { View, Image, StyleSheet } from "react";
+import { StyleSheet, Image, View } from "react-native";
 // react-router-dom components
 // import { Link } from "react-router-dom";
 
@@ -7,31 +8,52 @@ import { useState } from "react";
 import Card from "@mui/material/Card";
 // import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
+// import MuiLink from "@mui/material/Link";
 
 // @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
+// import FacebookIcon from "@mui/icons-material/Facebook";
+// import GitHubIcon from "@mui/icons-material/GitHub";
+// import GoogleIcon from "@mui/icons-material/Google";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
-import MKTypography from "components/MKTypography";
+// import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 import bgImage from "assets/images/building-scaled.jpg";
+import iconImage from "assets/images/punn-logo.png";
+import DefaultNavbar from "examples/Navbars/DefaultNavbar";
+import routes from "routes";
 // import axios from "axios";
 import api from "api/environment";
 import Swal from "sweetalert2";
-import { QRCodeCanvas } from "qrcode.react";
+// import { QRCodeCanvas } from "qrcode.react";
 
 function DetailCarpark() {
   // const [rememberMe, setRememberMe] = useState(false);
   const [LogCarpark, setLogCarpark] = useState("");
-  const [qrcode] = useState("This is the first line.\r\nThis is the second line");
+  // const [qrcode] = useState("This is the first line.\r\nThis is the second line");
   const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const styles = StyleSheet.create({
+    container: {
+      paddingTop: 10,
+    },
+    tinyLogo: {
+      width: 200,
+      height: 75,
+    },
+    displayCenter: {
+      display: "flex",
+      backgroundColor: "#444D58",
+    },
+    logo: {
+      width: 66,
+      height: 58,
+    },
+  });
 
   const getParkingDetail = (Log) => {
     let tempdata = {
@@ -69,7 +91,7 @@ function DetailCarpark() {
 
   return (
     <>
-      {/* <DefaultNavbar
+      <DefaultNavbar
         routes={routes}
         action={{
           type: "external",
@@ -79,7 +101,7 @@ function DetailCarpark() {
         }}
         transparent
         light
-      /> */}
+      />
       <MKBox
         position="absolute"
         top={0}
@@ -104,7 +126,6 @@ function DetailCarpark() {
             <Card>
               <MKBox
                 variant="gradient"
-                bgColor="info"
                 borderRadius="lg"
                 coloredShadow="info"
                 mx={2}
@@ -112,32 +133,20 @@ function DetailCarpark() {
                 p={2}
                 mb={1}
                 textAlign="center"
+                justifyContent="center"
+                alignItems="center"
+                style={styles.displayCenter}
               >
-                <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+                {/* <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
                   PUNN
-                </MKTypography>
-
-                <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <FacebookIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <GitHubIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <GoogleIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
-                </Grid>
+                </MKTypography> */}
+                <View style={styles.container}>
+                  <Image style={styles.tinyLogo} source={iconImage} />
+                </View>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
-                  <QRCodeCanvas value={qrcode} />
+                  {/* <QRCodeCanvas value={qrcode} /> */}
                   <MKBox mb={2}>
                     <MKInput
                       type="search"

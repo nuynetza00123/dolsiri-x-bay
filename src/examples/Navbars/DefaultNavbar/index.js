@@ -1,19 +1,3 @@
-/* eslint-disable no-param-reassign */
-/**
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { Fragment, useState, useEffect } from "react";
 
 // react-router components
@@ -37,15 +21,15 @@ import MKTypography from "components/MKTypography";
 import MKButton from "components/MKButton";
 
 // Material Kit 2 React example components
-import DefaultNavbarDropdown from "examples/Navbars/DefaultNavbar/DefaultNavbarDropdown";
+// import DefaultNavbarDropdown from "examples/Navbars/DefaultNavbar/DefaultNavbarDropdown";
 import DefaultNavbarMobile from "examples/Navbars/DefaultNavbar/DefaultNavbarMobile";
 
 // Material Kit 2 React base styles
 import breakpoints from "assets/theme/base/breakpoints";
 
-function DefaultNavbar({ brand, routes, transparent, light, action, sticky, relative, center }) {
+function DefaultNavbar({ brand, routes, transparent, light, action, sticky, relative }) {
   const [dropdown, setDropdown] = useState("");
-  const [dropdownEl, setDropdownEl] = useState("");
+  const [dropdownEl] = useState("");
   const [dropdownName, setDropdownName] = useState("");
   const [nestedDropdown, setNestedDropdown] = useState("");
   const [nestedDropdownEl, setNestedDropdownEl] = useState("");
@@ -60,7 +44,8 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
     // A function that sets the display state for the DefaultNavbarMobile.
     function displayMobileNavbar() {
       if (window.innerWidth < breakpoints.values.lg) {
-        setMobileView(true);
+        // setMobileView(true);
+        setMobileView(false);
         setMobileNavbar(false);
       } else {
         setMobileView(false);
@@ -81,25 +66,25 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
     return () => window.removeEventListener("resize", displayMobileNavbar);
   }, []);
 
-  const renderNavbarItems = routes.map(({ name, icon, href, route, collapse }) => (
-    <DefaultNavbarDropdown
-      key={name}
-      name={name}
-      icon={icon}
-      href={href}
-      route={route}
-      collapse={Boolean(collapse)}
-      onMouseEnter={({ currentTarget }) => {
-        if (collapse) {
-          setDropdown(currentTarget);
-          setDropdownEl(currentTarget);
-          setDropdownName(name);
-        }
-      }}
-      onMouseLeave={() => collapse && setDropdown(null)}
-      light={light}
-    />
-  ));
+  // const renderNavbarItems = routes.map(({ name, icon, href, route, collapse }) => (
+  //   <DefaultNavbarDropdown
+  //     key={name}
+  //     name={name}
+  //     icon={icon}
+  //     href={href}
+  //     route={route}
+  //     collapse={Boolean(collapse)}
+  //     onMouseEnter={({ currentTarget }) => {
+  //       if (collapse) {
+  //         setDropdown(currentTarget);
+  //         setDropdownEl(currentTarget);
+  //         setDropdownName(name);
+  //       }
+  //     }}
+  //     onMouseLeave={() => collapse && setDropdown(null)}
+  //     light={light}
+  //   />
+  // ));
 
   // Render the routes on the dropdown menu
   const renderRoutes = routes.map(({ name, collapse, columns, rowsPerColumn }) => {
@@ -480,14 +465,14 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
               {brand}
             </MKTypography>
           </MKBox>
-          <MKBox
+          {/* <MKBox
             color="inherit"
             display={{ xs: "none", lg: "flex" }}
             ml="auto"
             mr={center ? "auto" : 0}
           >
             {renderNavbarItems}
-          </MKBox>
+          </MKBox> */}
           <MKBox ml={{ xs: "auto", lg: 0 }}>
             {action &&
               (action.type === "internal" ? (
@@ -531,7 +516,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
             sx={{ cursor: "pointer" }}
             onClick={openMobileNavbar}
           >
-            <Icon fontSize="default">{mobileNavbar ? "close" : "menu"}</Icon>
+            {/* <Icon fontSize="default">{mobileNavbar ? "close" : "menu"}</Icon> */}
           </MKBox>
         </MKBox>
         <MKBox
@@ -551,7 +536,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
 
 // Setting default values for the props of DefaultNavbar
 DefaultNavbar.defaultProps = {
-  brand: "Material Kit 2",
+  brand: "PUNN Payment",
   transparent: false,
   light: false,
   action: false,
