@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // import { View, Image, StyleSheet } from "react";
 import { StyleSheet, Image, View } from "react-native";
 // react-router-dom components
@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid";
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
 // import MKTypography from "components/MKTypography";
+// eslint-disable-next-line no-unused-vars
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 import bgImage from "assets/images/building-scaled.jpg";
@@ -32,12 +33,14 @@ import Swal from "sweetalert2";
 
 function DetailCarpark() {
   // const [rememberMe, setRememberMe] = useState(false);
-  const navigate = useNavigate("");
   const [LogCarpark, setLogCarpark] = useState("");
   // const [qrcode] = useState("This is the first line.\r\nThis is the second line");
-  const [Data, setData] = useState();
+  const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const location = useLocation();
+  console.log(location.pathname);
 
   const styles = StyleSheet.create({
     container: {
@@ -57,9 +60,7 @@ function DetailCarpark() {
     },
   });
 
-  // eslint-disable-next-line no-unused-vars
-  const getParkingDetail = () => {
-    let Log = LogCarpark;
+  const getParkingDetail = (Log) => {
     let tempdata = {
       search: Log,
       lostCard: false,
@@ -70,13 +71,16 @@ function DetailCarpark() {
       .then(function (res) {
         setData(res.data);
         console.log(Data);
-
-        if (res.data.status == "0") {
-          navigate("/ParkingFee/" + Log);
-          setLogCarpark("");
-        } else if (res.data.status == "1") {
+        if (Data.status == "0") {
           Swal.fire({
-            title: res.data.message,
+            title: Data.message,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          setLogCarpark("");
+        } else if (Data.status == "1") {
+          Swal.fire({
+            title: Data.message,
             icon: "error",
             confirmButtonText: "Close",
           });
@@ -148,7 +152,7 @@ function DetailCarpark() {
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   {/* <QRCodeCanvas value={qrcode} /> */}
-                  <MKBox mb={2}>
+                  {/* <MKBox mb={2}>
                     <MKInput
                       type="search"
                       label="Search"
@@ -156,28 +160,24 @@ function DetailCarpark() {
                       onChange={(e) => setLogCarpark(e.target.value)}
                       fullWidth
                     />
-                  </MKBox>
-                  {LogCarpark !== "" && <p>Your name is {LogCarpark}.</p>}
+                  </MKBox> */}
                   {/* <MKBox mb={2}>
                     <MKInput type="password" label="Password" fullWidth />
                   </MKBox> */}
 
-                  <MKBox mt={4} mb={1}>
-                    {/* <MKButton
-                      variant="gradient"
-                      color="info"
-                      onClick={() => navigate("ParkingFee/232141123123123")}
-                      fullWidth
-                    >
-                      search
-                    </MKButton> */}
+                  <MKBox
+                    mt={4}
+                    mb={1}
+                    textAlign="center"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
                     <MKButton
                       variant="gradient"
-                      color="info"
-                      onClick={() => getParkingDetail()}
-                      fullWidth
+                      color="success"
+                      onClick={() => getParkingDetail(LogCarpark)}
                     >
-                      search
+                      Payment
                     </MKButton>
                   </MKBox>
                 </MKBox>

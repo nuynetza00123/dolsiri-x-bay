@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 // react-router components
+// eslint-disable-next-line no-unused-vars
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 // @mui material components
@@ -11,6 +12,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "assets/theme";
 // import Presentation from "layouts/pages/presentation";
 import Detail from "layouts/pages/detail-carpark";
+import ParkingFee from "layouts/pages/Parking-fee";
 
 // Material Kit 2 React routes
 import routes from "routes";
@@ -43,6 +45,7 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="/Detail" element={<Detail />} />
+        <Route path="ParkingFee/:id" element={<ParkingFee />} />
         <Route path="*" element={<Navigate to="/Detail" />} />
       </Routes>
     </ThemeProvider>
