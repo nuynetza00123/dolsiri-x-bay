@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // import { View, Image, StyleSheet } from "react";
 import { StyleSheet, Image, View } from "react-native";
@@ -18,7 +18,8 @@ import Grid from "@mui/material/Grid";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
-// import MKTypography from "components/MKTypography";
+// eslint-disable-next-line no-unused-vars
+import MKTypography from "components/MKTypography";
 // eslint-disable-next-line no-unused-vars
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
@@ -33,14 +34,24 @@ import Swal from "sweetalert2";
 
 function DetailCarpark() {
   // const [rememberMe, setRememberMe] = useState(false);
+  const location = useLocation();
+  console.log(location.pathname);
+  const words = location.pathname.split("/");
+
+  console.log(words[words.length - 1]);
+
+  const [show, setshow] = useState(false);
   const [LogCarpark, setLogCarpark] = useState("");
   // const [qrcode] = useState("This is the first line.\r\nThis is the second line");
   const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
-  const location = useLocation();
-  console.log(location.pathname);
+  useEffect(() => {
+    getParkingDetail(words[words.length - 1]);
+  }, []);
+
+  console.log(Data);
 
   const styles = StyleSheet.create({
     container: {
@@ -61,6 +72,7 @@ function DetailCarpark() {
   });
 
   const getParkingDetail = (Log) => {
+    // let data = { ...Data };
     let tempdata = {
       search: Log,
       lostCard: false,
@@ -69,15 +81,15 @@ function DetailCarpark() {
     api
       .post(`Redemption/GetParkingDetail`, tempdata)
       .then(function (res) {
-        setData(res.data);
-        console.log(Data);
-        if (Data.status == "0") {
-          Swal.fire({
-            title: Data.message,
-            icon: "error",
-            confirmButtonText: "Close",
-          });
-          setLogCarpark("");
+        if (res.data.status == "0") {
+          // setData(res.data.data[0]);
+
+          setData((Data) => ({
+            Data,
+            ...res.data.data[0],
+          }));
+          setshow(true);
+          setLogCarpark(Log);
         } else if (Data.status == "1") {
           Swal.fire({
             title: Data.message,
@@ -127,7 +139,7 @@ function DetailCarpark() {
       />
       <MKBox px={1} width="100%" height="100vh" mx="auto" position="relative" zIndex={2}>
         <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
-          <Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
+          <Grid item xs={11} sm={9} md={7} lg={5} xl={4}>
             <Card>
               <MKBox
                 variant="gradient"
@@ -142,29 +154,95 @@ function DetailCarpark() {
                 alignItems="center"
                 style={styles.displayCenter}
               >
-                {/* <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  PUNN
-                </MKTypography> */}
                 <View style={styles.container}>
                   <Image style={styles.tinyLogo} source={iconImage} />
                 </View>
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
-                  {/* <QRCodeCanvas value={qrcode} /> */}
-                  {/* <MKBox mb={2}>
-                    <MKInput
-                      type="search"
-                      label="Search"
-                      value={LogCarpark}
-                      onChange={(e) => setLogCarpark(e.target.value)}
-                      fullWidth
-                    />
-                  </MKBox> */}
-                  {/* <MKBox mb={2}>
-                    <MKInput type="password" label="Password" fullWidth />
-                  </MKBox> */}
-
+                  {show && (
+                    <Grid
+                      container
+                      spacing={2}
+                      justifyContent="center"
+                      alignItems="center"
+                      height="100%"
+                    >
+                      <Grid container item xs={3} sm={3} md={3} lg={3} xl={3}>
+                        <MKTypography variant="button">PlateNo</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        item
+                        xs={3}
+                        sm={3}
+                        md={3}
+                        lg={3}
+                        xl={3}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.plateNo}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={3} sm={3} md={3} lg={3} xl={3}>
+                        <MKTypography variant="button">Vehicle</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={3}
+                        sm={3}
+                        md={3}
+                        lg={3}
+                        xl={3}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.vehicleTypeName}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">TicketNo</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.ticketNo}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">DateTime</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.entryDateTime}
+                        </MKTypography>
+                      </Grid>
+                    </Grid>
+                  )}
                   <MKBox
                     mt={4}
                     mb={1}
