@@ -168,7 +168,7 @@ function DetailCarpark() {
                       alignItems="center"
                       height="100%"
                     >
-                      <Grid container item xs={3} sm={3} md={3} lg={3} xl={3}>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <MKTypography variant="button">PlateNo</MKTypography>
                       </Grid>
                       <Grid
@@ -177,17 +177,17 @@ function DetailCarpark() {
                         justifyContent="flex-end"
                         alignItems="center"
                         item
-                        xs={3}
-                        sm={3}
-                        md={3}
-                        lg={3}
-                        xl={3}
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
                           {Data.plateNo}
                         </MKTypography>
                       </Grid>
-                      <Grid container item xs={3} sm={3} md={3} lg={3} xl={3}>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <MKTypography variant="button">Vehicle</MKTypography>
                       </Grid>
                       <Grid
@@ -195,11 +195,11 @@ function DetailCarpark() {
                         direction="row"
                         justifyContent="flex-end"
                         item
-                        xs={3}
-                        sm={3}
-                        md={3}
-                        lg={3}
-                        xl={3}
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
                           {Data.vehicleTypeName}
@@ -239,6 +239,71 @@ function DetailCarpark() {
                       >
                         <MKTypography fontWeight="bold" variant="button">
                           {Data.entryDateTime}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">DateTime In</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.entryDateTime}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">Duration</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.parkHH + " hrs " + Data.parkMM + " mins"}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">Total</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.total + " Baht"}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <MKTypography variant="button">Rate Detail</MKTypography>
+                      </Grid>
+                      <Grid container direction="row" item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <MKTypography fontWeight="bold" variant="button" color="error">
+                          {Data.rateDetailEN}
+                        </MKTypography>
+                        <MKTypography fontWeight="bold" variant="button" color="error">
+                          {Data.rateDetailTH}
                         </MKTypography>
                       </Grid>
                     </Grid>
