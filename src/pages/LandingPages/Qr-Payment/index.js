@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 // import { View, Image, StyleSheet } from "react";
 import { StyleSheet, Image, View } from "react-native";
 // react-router-dom components
@@ -31,12 +30,12 @@ import routes from "routes";
 // import axios from "axios";
 import api from "api/environment";
 import Swal from "sweetalert2";
-// import { QRCodeCanvas } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
-function DetailCarpark() {
+function Qrscan() {
   // const [rememberMe, setRememberMe] = useState(false);
+  // const navigate = useNavigate("");
   const location = useLocation();
-  const navigate = useNavigate("");
   console.log(location.pathname);
   const words = location.pathname.split("/");
 
@@ -44,14 +43,12 @@ function DetailCarpark() {
 
   const [show, setshow] = useState(false);
   const [LogCarpark, setLogCarpark] = useState("");
-  // const [qrcode] = useState("This is the first line.\r\nThis is the second line");
+  const [qrcode] = useState("This is the first line.\r\nThis is the second line");
   const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   useEffect(() => {
-    setLogCarpark(words[words.length - 1]);
-
     getParkingDetail(words[words.length - 1]);
   }, []);
 
@@ -74,12 +71,6 @@ function DetailCarpark() {
       height: 58,
     },
   });
-
-  const getQr = (Log) => {
-    if (Data.total > 0) {
-      navigate("/QrPayment/" + Log);
-    }
-  };
 
   const getParkingDetail = (Log) => {
     // let data = { ...Data };
@@ -178,6 +169,7 @@ function DetailCarpark() {
                       alignItems="center"
                       height="100%"
                     >
+                      <QRCodeCanvas value={qrcode} />
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <MKTypography variant="button">PlateNo</MKTypography>
                       </Grid>
@@ -325,7 +317,11 @@ function DetailCarpark() {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <MKButton variant="gradient" color="success" onClick={() => getQr(LogCarpark)}>
+                    <MKButton
+                      variant="gradient"
+                      color="success"
+                      onClick={() => getParkingDetail(LogCarpark)}
+                    >
                       Payment
                     </MKButton>
                   </MKBox>
@@ -342,4 +338,4 @@ function DetailCarpark() {
   );
 }
 
-export default DetailCarpark;
+export default Qrscan;

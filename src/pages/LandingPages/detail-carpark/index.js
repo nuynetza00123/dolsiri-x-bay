@@ -157,7 +157,7 @@ function DetailCarpark() {
                       fullWidth
                     />
                   </MKBox>
-                  {LogCarpark !== "" && <p>Your name is {LogCarpark}.</p>}
+                  {/* {LogCarpark !== "" && <p>Your name is {LogCarpark}.</p>} */}
                   {/* <MKBox mb={2}>
                     <MKInput type="password" label="Password" fullWidth />
                   </MKBox> */}

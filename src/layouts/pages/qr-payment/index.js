@@ -14,8 +14,8 @@ Coded by www.creative-tim.com
 */
 
 // Material Kit 2 React pages
-import SignIn from "pages/LandingPages/SignIn";
+import QrPayment from "pages/LandingPages/Qr-Payment";
 
 export default function SignInPage() {
-  return <SignIn />;
+  return <QrPayment />;
 }

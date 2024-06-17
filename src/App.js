@@ -13,6 +13,7 @@ import theme from "assets/theme";
 // import Presentation from "layouts/pages/presentation";
 import Detail from "layouts/pages/detail-carpark";
 import ParkingFee from "layouts/pages/Parking-fee";
+import QrPayment from "layouts/pages/qr-payment";
 
 // Material Kit 2 React routes
 import routes from "routes";
@@ -46,6 +47,7 @@ export default function App() {
         {getRoutes(routes)}
         <Route path="/Detail" element={<Detail />} />
         <Route path="ParkingFee/:id" element={<ParkingFee />} />
+        <Route path="QrPayment/:id" element={<QrPayment />} />
         <Route path="*" element={<Navigate to="/Detail" />} />
       </Routes>
     </ThemeProvider>
