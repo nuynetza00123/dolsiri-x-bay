@@ -23,8 +23,8 @@ import MKTypography from "components/MKTypography";
 // eslint-disable-next-line no-unused-vars
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
-import bgImage from "assets/images/building-scaled.jpg";
-import iconImage from "assets/images/punn-logo.png";
+import bgImage from "assets/images/BG_KS.jpg";
+import iconImage from "assets/images/krungsri-logo.jpg";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import routes from "routes";
 // import axios from "axios";
@@ -64,7 +64,7 @@ function Qrscan() {
     },
     displayCenter: {
       display: "flex",
-      backgroundColor: "#444D58",
+      backgroundColor: "#715E60",
     },
     logo: {
       width: 66,
@@ -140,7 +140,7 @@ function Qrscan() {
       />
       <MKBox px={1} width="100%" height="100vh" mx="auto" position="relative" zIndex={2}>
         <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
-          <Grid item xs={11} sm={9} md={7} lg={5} xl={4}>
+          <Grid item xs={11} sm={8} md={4} lg={3} xl={3}>
             <Card>
               <MKBox
                 variant="gradient"
@@ -169,7 +169,19 @@ function Qrscan() {
                       alignItems="center"
                       height="100%"
                     >
-                      <QRCodeCanvas value={qrcode} />
+                      <Grid
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        <QRCodeCanvas value={qrcode} size={200} />
+                      </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <MKTypography variant="button">PlateNo</MKTypography>
                       </Grid>
@@ -241,71 +253,6 @@ function Qrscan() {
                       >
                         <MKTypography fontWeight="bold" variant="button">
                           {Data.entryDateTime}
-                        </MKTypography>
-                      </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">DateTime In</MKTypography>
-                      </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-end"
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
-                      >
-                        <MKTypography fontWeight="bold" variant="button">
-                          {Data.entryDateTime}
-                        </MKTypography>
-                      </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">Duration</MKTypography>
-                      </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-end"
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
-                      >
-                        <MKTypography fontWeight="bold" variant="button">
-                          {Data.parkHH + " hrs " + Data.parkMM + " mins"}
-                        </MKTypography>
-                      </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">Total</MKTypography>
-                      </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-end"
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
-                      >
-                        <MKTypography fontWeight="bold" variant="button">
-                          {Data.total + " Baht"}
-                        </MKTypography>
-                      </Grid>
-                      <Grid container item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <MKTypography variant="button">Rate Detail</MKTypography>
-                      </Grid>
-                      <Grid container direction="row" item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <MKTypography fontWeight="bold" variant="button" color="error">
-                          {Data.rateDetailEN}
-                        </MKTypography>
-                        <MKTypography fontWeight="bold" variant="button" color="error">
-                          {Data.rateDetailTH}
                         </MKTypography>
                       </Grid>
                     </Grid>

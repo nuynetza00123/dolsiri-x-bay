@@ -312,6 +312,8 @@ function DetailCarpark() {
                         <MKTypography fontWeight="bold" variant="button" color="error">
                           {Data.rateDetailEN}
                         </MKTypography>
+                      </Grid>
+                      <Grid container direction="row" item xs={12} sm={12} md={12} lg={12} xl={12}>
                         <MKTypography fontWeight="bold" variant="button" color="error">
                           {Data.rateDetailTH}
                         </MKTypography>
