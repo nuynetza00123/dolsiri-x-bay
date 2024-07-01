@@ -234,7 +234,7 @@ function DetailCarpark() {
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">DateTime</MKTypography>
+                        <MKTypography variant="button">Log Id</MKTypography>
                       </Grid>
                       <Grid
                         container
@@ -248,7 +248,7 @@ function DetailCarpark() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.entryDateTime}
+                          {Data.logId}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>

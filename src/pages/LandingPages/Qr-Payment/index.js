@@ -100,17 +100,22 @@ function Qrscan() {
       .then(function (res) {
         if (res.data.status == "0") {
           // setData(res.data.data[0]);
+          const timeElapsed = Date.now();
+          const today = new Date(timeElapsed);
 
           setData((Data) => ({
             Data,
             ...res.data.data[0],
           }));
           setQrCode(
-            res.data.data[0].total +
+            "|010556204576101" +
               "\r\n" +
-              res.data.data[0].ticketNo +
+              res.data.data[0].logId +
               "\r\n" +
-              res.data.data[0].entryDateTime
+              today.toLocaleDateString() +
+              "\r\n" +
+              res.data.data[0].total +
+              "00"
           );
           setshow(true);
           setLogCarpark(Log);
