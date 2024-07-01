@@ -320,17 +320,24 @@ function DetailCarpark() {
                       </Grid>
                     </Grid>
                   )}
-                  <MKBox
-                    mt={4}
-                    mb={1}
-                    textAlign="center"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <MKButton variant="gradient" color="success" onClick={() => getQr(LogCarpark)}>
-                      Payment
-                    </MKButton>
-                  </MKBox>
+
+                  {Data.total != 0 && (
+                    <MKBox
+                      mt={4}
+                      mb={1}
+                      textAlign="center"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <MKButton
+                        variant="gradient"
+                        color="success"
+                        onClick={() => getQr(LogCarpark)}
+                      >
+                        Payment
+                      </MKButton>
+                    </MKBox>
+                  )}
                 </MKBox>
               </MKBox>
             </Card>

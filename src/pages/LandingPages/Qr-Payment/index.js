@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { View, Image, StyleSheet } from "react";
 import { StyleSheet, Image, View } from "react-native";
 // react-router-dom components
@@ -12,9 +12,8 @@ import Grid from "@mui/material/Grid";
 // import MuiLink from "@mui/material/Link";
 
 // @mui icons
-// import FacebookIcon from "@mui/icons-material/Facebook";
-// import GitHubIcon from "@mui/icons-material/GitHub";
-// import GoogleIcon from "@mui/icons-material/Google";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -34,7 +33,7 @@ import { QRCodeCanvas } from "qrcode.react";
 
 function Qrscan() {
   // const [rememberMe, setRememberMe] = useState(false);
-  // const navigate = useNavigate("");
+  const navigate = useNavigate("");
   const location = useLocation();
   console.log(location.pathname);
   const words = location.pathname.split("/");
@@ -42,8 +41,11 @@ function Qrscan() {
   console.log(words[words.length - 1]);
 
   const [show, setshow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [paymentSuccess, setpaymentSuccess] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [LogCarpark, setLogCarpark] = useState("");
-  const [qrcode] = useState("This is the first line.\r\nThis is the second line");
+  const [qrcode, setQrCode] = useState("");
   const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
@@ -64,13 +66,27 @@ function Qrscan() {
     },
     displayCenter: {
       display: "flex",
+      color: "#FCDC00",
+      backgroundColor: "#715E60",
+    },
+    displayCenterButton: {
+      color: "#FCDC00",
       backgroundColor: "#715E60",
     },
     logo: {
       width: 66,
       height: 58,
     },
+    Icon: {
+      width: 100,
+      height: 100,
+      color: "green",
+    },
   });
+
+  const back = () => {
+    navigate("/Detail");
+  };
 
   const getParkingDetail = (Log) => {
     // let data = { ...Data };
@@ -89,15 +105,23 @@ function Qrscan() {
             Data,
             ...res.data.data[0],
           }));
+          setQrCode(
+            res.data.data[0].total +
+              "\r\n" +
+              res.data.data[0].ticketNo +
+              "\r\n" +
+              res.data.data[0].entryDateTime
+          );
           setshow(true);
           setLogCarpark(Log);
-        } else if (Data.status == "1") {
+        } else if (res.data.status == "1") {
           Swal.fire({
-            title: Data.message,
+            title: res.data.message,
             icon: "error",
             confirmButtonText: "Close",
           });
           setLogCarpark("");
+          navigate("/Detail");
         }
 
         // console.log(res.data);
@@ -142,23 +166,26 @@ function Qrscan() {
         <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
           <Grid item xs={11} sm={8} md={4} lg={3} xl={3}>
             <Card>
-              <MKBox
-                variant="gradient"
-                borderRadius="lg"
-                coloredShadow="info"
-                mx={2}
-                mt={-3}
-                p={2}
-                mb={1}
-                textAlign="center"
-                justifyContent="center"
-                alignItems="center"
-                style={styles.displayCenter}
-              >
-                <View style={styles.container}>
-                  <Image style={styles.tinyLogo} source={iconImage} />
-                </View>
-              </MKBox>
+              {show && (
+                <MKBox
+                  variant="gradient"
+                  borderRadius="lg"
+                  coloredShadow="info"
+                  mx={2}
+                  mt={-3}
+                  p={2}
+                  mb={1}
+                  textAlign="center"
+                  justifyContent="center"
+                  alignItems="center"
+                  style={styles.displayCenter}
+                >
+                  <View style={styles.container}>
+                    <Image style={styles.tinyLogo} source={iconImage} />
+                  </View>
+                </MKBox>
+              )}
+
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   {show && (
@@ -182,8 +209,24 @@ function Qrscan() {
                       >
                         <QRCodeCanvas value={qrcode} size={200} />
                       </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          PUNN
+                        </MKTypography>
+                      </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">PlateNo</MKTypography>
+                        <MKTypography variant="button">Amount</MKTypography>
                       </Grid>
                       <Grid
                         container
@@ -198,11 +241,11 @@ function Qrscan() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.plateNo}
+                          {Data.total + " Baht"}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">Vehicle</MKTypography>
+                        <MKTypography variant="button">Name</MKTypography>
                       </Grid>
                       <Grid
                         container
@@ -220,7 +263,25 @@ function Qrscan() {
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">TicketNo</MKTypography>
+                        <MKTypography variant="button">Ref.1</MKTypography>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="flex-end"
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        xl={6}
+                      >
+                        <MKTypography fontWeight="bold" variant="button">
+                          {Data.logId}
+                        </MKTypography>
+                      </Grid>
+                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <MKTypography variant="button">Ref.2</MKTypography>
                       </Grid>
                       <Grid
                         container
@@ -238,7 +299,7 @@ function Qrscan() {
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">DateTime</MKTypography>
+                        <MKTypography variant="button">Info.1</MKTypography>
                       </Grid>
                       <Grid
                         container
@@ -252,26 +313,101 @@ function Qrscan() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.entryDateTime}
+                          {Data.rateDetailEN}
                         </MKTypography>
                       </Grid>
+                      <MKBox
+                        mt={4}
+                        mb={1}
+                        textAlign="center"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <MKButton
+                          onClick={() => back()}
+                          variant="gradient"
+                          style={styles.displayCenterButton}
+                        >
+                          Download Qr Code
+                        </MKButton>
+                      </MKBox>
                     </Grid>
                   )}
-                  <MKBox
+                  {!show && (
+                    <Grid
+                      container
+                      spacing={2}
+                      justifyContent="center"
+                      alignItems="center"
+                      height="100%"
+                    >
+                      <Grid
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        {paymentSuccess && <TaskAltIcon style={styles.Icon} />}
+                        {!paymentSuccess && <HighlightOffIcon style={styles.Icon} />}
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        {paymentSuccess && (
+                          <MKTypography fontWeight="bold" variant="h3" color="primary">
+                            payment successful
+                          </MKTypography>
+                        )}
+                        {!paymentSuccess && (
+                          <MKTypography fontWeight="bold" variant="h3" color="primary">
+                            payment failed
+                          </MKTypography>
+                        )}
+                      </Grid>
+
+                      <MKBox
+                        mt={4}
+                        mb={1}
+                        textAlign="center"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <MKButton
+                          onClick={() => back()}
+                          variant="gradient"
+                          style={styles.displayCenterButton}
+                        >
+                          Back To Main Page
+                        </MKButton>
+                      </MKBox>
+                    </Grid>
+                  )}
+
+                  {/* <MKBox
                     mt={4}
                     mb={1}
                     textAlign="center"
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <MKButton
-                      variant="gradient"
-                      color="success"
-                      onClick={() => getParkingDetail(LogCarpark)}
-                    >
-                      Payment
+                    <MKButton variant="gradient" style={styles.displayCenterButton}>
+                      Download Qr Code
                     </MKButton>
-                  </MKBox>
+                  </MKBox> */}
                 </MKBox>
               </MKBox>
             </Card>
