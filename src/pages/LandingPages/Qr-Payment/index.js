@@ -22,8 +22,8 @@ import MKTypography from "components/MKTypography";
 // eslint-disable-next-line no-unused-vars
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
-import bgImage from "assets/images/BG_KS.jpg";
-import iconImage from "assets/images/krungsri-logo.jpg";
+import bgImage from "assets/images/BG-QR.jpg";
+import iconImage from "assets/images/ThaiQRs.jpg";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import routes from "routes";
 // import axios from "axios";
@@ -40,7 +40,7 @@ function Qrscan() {
 
   console.log(words[words.length - 1]);
 
-  const [show, setshow] = useState(false);
+  const [show, setshow] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [paymentSuccess, setpaymentSuccess] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -61,17 +61,17 @@ function Qrscan() {
       paddingTop: 10,
     },
     tinyLogo: {
-      width: 200,
+      width: 250,
       height: 75,
     },
     displayCenter: {
       display: "flex",
       color: "#FCDC00",
-      backgroundColor: "#715E60",
+      backgroundColor: "#1A3761",
     },
     displayCenterButton: {
-      color: "#FCDC00",
-      backgroundColor: "#715E60",
+      color: "#FFFFFF",
+      backgroundColor: "#1A3761",
     },
     logo: {
       width: 66,
@@ -212,7 +212,7 @@ function Qrscan() {
                         lg={12}
                         xl={12}
                       >
-                        <QRCodeCanvas value={qrcode} size={200} />
+                        <QRCodeCanvas value={qrcode} size={180} />
                       </Grid>
                       <Grid
                         container
