@@ -29,32 +29,33 @@ import routes from "routes";
 // import axios from "axios";
 import api from "api/environment";
 import Swal from "sweetalert2";
-import { QRCodeCanvas } from "qrcode.react";
+// import { QRCodeCanvas } from "qrcode.react";
 
 function Qrscan() {
   // const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate("");
   const location = useLocation();
-  console.log(location.pathname);
+  // console.log(location.pathname);
   const words = location.pathname.split("/");
 
-  console.log(words[words.length - 1]);
+  // console.log(words[words.length - 1]);
 
   const [show, setshow] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [paymentSuccess, setpaymentSuccess] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [LogCarpark, setLogCarpark] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [qrcode, setQrCode] = useState("");
   const [Data, setData] = useState([]);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   useEffect(() => {
-    getParkingDetail(words[words.length - 1]);
+    GetQrcode(words[words.length - 1]);
   }, []);
 
-  console.log(Data);
+  // console.log(Data);
 
   const styles = StyleSheet.create({
     container: {
@@ -77,6 +78,10 @@ function Qrscan() {
       width: 66,
       height: 58,
     },
+    logoQrcode: {
+      width: 220,
+      height: 220,
+    },
     Icon: {
       width: 100,
       height: 100,
@@ -88,35 +93,24 @@ function Qrscan() {
     navigate("/Detail");
   };
 
-  const getParkingDetail = (Log) => {
+  const GetQrcode = (Log) => {
     // let data = { ...Data };
     let tempdata = {
-      search: Log,
-      lostCard: false,
+      invoiceNo: Log,
     };
 
     api
-      .post(`Redemption/GetParkingDetail`, tempdata)
+      .post(`Payment/GetQrcode`, tempdata)
       .then(function (res) {
-        if (res.data.status == "0") {
+        if (res.data.status == "200") {
           // setData(res.data.data[0]);
-          const timeElapsed = Date.now();
-          const today = new Date(timeElapsed);
-
+          // const timeElapsed = Date.now();
+          // const today = new Date(timeElapsed);
+          console.log(res.data.data);
           setData((Data) => ({
             Data,
-            ...res.data.data[0],
+            ...res.data.data,
           }));
-          setQrCode(
-            "|010556204576101" +
-              "\r\n" +
-              res.data.data[0].logId +
-              "\r\n" +
-              today.toLocaleDateString() +
-              "\r\n" +
-              res.data.data[0].total +
-              "00"
-          );
           setshow(true);
           setLogCarpark(Log);
         } else if (res.data.status == "1") {
@@ -126,7 +120,7 @@ function Qrscan() {
             confirmButtonText: "Close",
           });
           setLogCarpark("");
-          navigate("/Detail");
+          navigate("/ParkingFee/" + Log);
         }
 
         // console.log(res.data);
@@ -211,9 +205,14 @@ function Qrscan() {
                         md={12}
                         lg={12}
                         xl={12}
-                      >
-                        <QRCodeCanvas value={qrcode} size={180} />
-                      </Grid>
+                      ></Grid>
+
+                      <Image
+                        style={styles.logoQrcode}
+                        source={{
+                          uri: Data.imageAsBase64,
+                        }}
+                      />
                       <Grid
                         container
                         direction="row"
@@ -227,10 +226,10 @@ function Qrscan() {
                         xl={12}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          PUNN
+                          {"กรุณาชำระก่อนเวลา : 2:00"}
                         </MKTypography>
                       </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                      <Grid container item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <MKTypography variant="button">Amount</MKTypography>
                       </Grid>
                       <Grid
@@ -239,17 +238,17 @@ function Qrscan() {
                         justifyContent="flex-end"
                         alignItems="center"
                         item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
+                        xs={8}
+                        sm={8}
+                        md={8}
+                        lg={8}
+                        xl={8}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.total + " Baht"}
+                          {Data.amount + " Baht"}
                         </MKTypography>
                       </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
+                      <Grid container item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <MKTypography variant="button">Name</MKTypography>
                       </Grid>
                       <Grid
@@ -257,14 +256,14 @@ function Qrscan() {
                         direction="row"
                         justifyContent="flex-end"
                         item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
+                        xs={8}
+                        sm={8}
+                        md={8}
+                        lg={8}
+                        xl={8}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.vehicleTypeName}
+                          {"Dolsiri Development co. ltd"}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -282,7 +281,7 @@ function Qrscan() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.logId}
+                          {Data.ref1}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -300,25 +299,7 @@ function Qrscan() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.ticketNo}
-                        </MKTypography>
-                      </Grid>
-                      <Grid container item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <MKTypography variant="button">Info.1</MKTypography>
-                      </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-end"
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        xl={6}
-                      >
-                        <MKTypography fontWeight="bold" variant="button">
-                          {Data.rateDetailEN}
+                          {Data.ref2}
                         </MKTypography>
                       </Grid>
                       <MKBox
