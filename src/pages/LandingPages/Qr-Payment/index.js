@@ -100,12 +100,13 @@ function Qrscan() {
     };
 
     api
-      .post(`Payment/GetQrcode`, tempdata)
+      .post(`Payment/GetQrcode`, tempdata, {
+        headers: {
+          "API-Key": "6b3a44e1-043c-4b3b-9317-7bcefa2c92c6",
+        },
+      })
       .then(function (res) {
         if (res.data.status == "200") {
-          // setData(res.data.data[0]);
-          // const timeElapsed = Date.now();
-          // const today = new Date(timeElapsed);
           console.log(res.data.data);
           setData((Data) => ({
             Data,
