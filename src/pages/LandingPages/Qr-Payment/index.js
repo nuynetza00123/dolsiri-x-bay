@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { View, Image, StyleSheet } from "react";
 import { StyleSheet, Image, View } from "react-native";
+import html2canvas from "html2canvas";
 // react-router-dom components
 // import { Link } from "react-router-dom";
 
@@ -48,11 +49,20 @@ function Qrscan() {
   // eslint-disable-next-line no-unused-vars
   const [qrcode, setQrCode] = useState("");
   const [Data, setData] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [DataInquiry, setDataInquiry] = useState([]);
+
+  const [seconds, setSeconds] = useState(180);
+
+  const captureRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
+  const [image, setImage] = useState(null);
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   useEffect(() => {
     GetQrcode(words[words.length - 1]);
+    Timer();
   }, []);
 
   // console.log(Data);
@@ -89,8 +99,36 @@ function Qrscan() {
     },
   });
 
+  const handleCapture = async () => {
+    if (captureRef.current) {
+      const canvas = await html2canvas(captureRef.current);
+      const imgData = canvas.toDataURL("image/png");
+      setImage(imgData);
+
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "screenshot.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const Timer = () => {
+    let interval = null;
+    if (seconds > 0) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => seconds - 1);
+      }, 1000);
+    } else if (seconds == 0) {
+      setshow(false);
+      setpaymentSuccess(false);
+      clearInterval(interval);
+    }
+  };
+
   const back = () => {
-    navigate("/Detail");
+    navigate("/ParkingFee/" + words[words.length - 1]);
   };
 
   const GetQrcode = (Log) => {
@@ -107,21 +145,62 @@ function Qrscan() {
       })
       .then(function (res) {
         if (res.data.status == "200") {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setData((Data) => ({
             Data,
             ...res.data.data,
           }));
           setshow(true);
           setLogCarpark(Log);
+          Inquiry(Log);
         } else if (res.data.status == "1") {
           Swal.fire({
             title: res.data.message,
             icon: "error",
             confirmButtonText: "Close",
           });
+          setshow(true);
           setLogCarpark("");
           navigate("/ParkingFee/" + Log);
+        }
+
+        // console.log(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const Inquiry = (Log) => {
+    // let data = { ...Data };
+    let tempdata = {
+      invoiceNo: Log,
+    };
+
+    api
+      .post(`Payment/InquiryPayment`, tempdata, {
+        headers: {
+          "API-Key": "6b3a44e1-043c-4b3b-9317-7bcefa2c92c6",
+        },
+      })
+      .then(function (res) {
+        if (res.data.status == "200") {
+          // console.log(res.data.data);
+          setDataInquiry((DataInquiry) => ({
+            DataInquiry,
+            ...res.data.data,
+          }));
+          setshow(false);
+          setpaymentSuccess(true);
+        } else if (res.data.status == "1") {
+          setshow(false);
+          setpaymentSuccess(false);
+          Swal.fire({
+            title: res.data.message,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          // navigate("/ParkingFee/" + Log);
         }
 
         // console.log(res.data);
@@ -209,6 +288,7 @@ function Qrscan() {
                       ></Grid>
 
                       <Image
+                        ref={captureRef}
                         style={styles.logoQrcode}
                         source={{
                           uri: Data.imageAsBase64,
@@ -227,7 +307,14 @@ function Qrscan() {
                         xl={12}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {"กรุณาชำระก่อนเวลา : 2:00"}
+                          PAY WITHIN{" "}
+                          {Math.floor(seconds / 60)
+                            .toString()
+                            .padStart(2, "0")}{" "}
+                          :{" "}
+                          {Math.ceil(seconds % 60)
+                            .toString()
+                            .padStart(2, "0")}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -311,7 +398,7 @@ function Qrscan() {
                         alignItems="center"
                       >
                         <MKButton
-                          onClick={() => back()}
+                          onClick={() => handleCapture()}
                           variant="gradient"
                           style={styles.displayCenterButton}
                         >
