@@ -302,7 +302,7 @@ function DetailCarpark() {
                         xl={6}
                       >
                         <MKTypography fontWeight="bold" variant="button">
-                          {Data.total + " Baht"}
+                          {Data.total.toLocaleString() + " Baht"}
                         </MKTypography>
                       </Grid>
                       <Grid container item xs={12} sm={12} md={12} lg={12} xl={12}>

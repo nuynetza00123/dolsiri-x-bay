@@ -49,14 +49,17 @@ function Qrscan() {
   // eslint-disable-next-line no-unused-vars
   const [qrcode, setQrCode] = useState("");
   const [Data, setData] = useState([]);
+  const [amount, setamount] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [DataInquiry, setDataInquiry] = useState([]);
 
-  const [seconds, setSeconds] = useState(180);
+  let [seconds, setSeconds] = useState(180);
 
   const captureRef = useRef(null);
   // eslint-disable-next-line no-unused-vars
   const [image, setImage] = useState(null);
+
+  // const interval = useRef();
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
@@ -116,14 +119,20 @@ function Qrscan() {
 
   const Timer = () => {
     let interval = null;
+    // let count = 180;
     if (seconds > 0) {
       interval = setInterval(() => {
         setSeconds((seconds) => seconds - 1);
+        seconds--;
+        // console.log(seconds);
+        // Timer();
+        if (seconds <= 0) {
+          setshow(false);
+          // console.log(seconds);
+          setpaymentSuccess(false);
+          clearInterval(interval);
+        }
       }, 1000);
-    } else if (seconds == 0) {
-      setshow(false);
-      setpaymentSuccess(false);
-      clearInterval(interval);
     }
   };
 
@@ -151,6 +160,7 @@ function Qrscan() {
             ...res.data.data,
           }));
           setshow(true);
+          setamount(res.data.data.amount);
           setLogCarpark(Log);
           Inquiry(Log);
         } else if (res.data.status == "1") {
@@ -195,11 +205,11 @@ function Qrscan() {
         } else if (res.data.status == "1") {
           setshow(false);
           setpaymentSuccess(false);
-          Swal.fire({
-            title: res.data.message,
-            icon: "error",
-            confirmButtonText: "Close",
-          });
+          // Swal.fire({
+          //   title: res.data.message,
+          //   icon: "error",
+          //   confirmButtonText: "Close",
+          // });
           // navigate("/ParkingFee/" + Log);
         }
 
@@ -320,22 +330,24 @@ function Qrscan() {
                       <Grid container item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <MKTypography variant="button">Amount</MKTypography>
                       </Grid>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="flex-end"
-                        alignItems="center"
-                        item
-                        xs={8}
-                        sm={8}
-                        md={8}
-                        lg={8}
-                        xl={8}
-                      >
-                        <MKTypography fontWeight="bold" variant="button">
-                          {Data.amount + " Baht"}
-                        </MKTypography>
-                      </Grid>
+                      {Data.amount != 0 && (
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                          item
+                          xs={8}
+                          sm={8}
+                          md={8}
+                          lg={8}
+                          xl={8}
+                        >
+                          <MKTypography fontWeight="bold" variant="button">
+                            {amount.toLocaleString() + " Baht"}
+                          </MKTypography>
+                        </Grid>
+                      )}
                       <Grid container item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <MKTypography variant="button">Name</MKTypography>
                       </Grid>
@@ -443,12 +455,19 @@ function Qrscan() {
                       >
                         {paymentSuccess && (
                           <MKTypography fontWeight="bold" variant="h3" color="primary">
-                            payment successful
+                            Payment Successful
                           </MKTypography>
                         )}
                         {!paymentSuccess && (
-                          <MKTypography fontWeight="bold" variant="h3" color="primary">
-                            payment failed
+                          <MKTypography
+                            fontWeight="bold"
+                            variant="h3"
+                            color="error"
+                            textAlign="center"
+                          >
+                            Payment Failed
+                            <br />
+                            Time Out !
                           </MKTypography>
                         )}
                       </Grid>
