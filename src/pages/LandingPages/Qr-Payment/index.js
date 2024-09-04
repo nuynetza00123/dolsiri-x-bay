@@ -144,6 +144,7 @@ function Qrscan() {
     // let data = { ...Data };
     let tempdata = {
       invoiceNo: Log,
+      term_ID: "301",
     };
 
     api
@@ -222,17 +223,7 @@ function Qrscan() {
 
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://punnspaces.com/",
-          label: "PUNN | Smart Workspace",
-          color: "info",
-        }}
-        transparent
-        light
-      />
+      <DefaultNavbar routes={routes} transparent light />
       <MKBox
         position="absolute"
         top={0}

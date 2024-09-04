@@ -35,6 +35,7 @@ function DetailCarpark() {
   const navigate = useNavigate("");
   const [LogCarpark, setLogCarpark] = useState("");
   // const [qrcode] = useState("This is the first line.\r\nThis is the second line");
+  // eslint-disable-next-line no-unused-vars
   const [Data, setData] = useState();
 
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
@@ -69,7 +70,7 @@ function DetailCarpark() {
       .post(`Redemption/GetParkingDetail`, tempdata)
       .then(function (res) {
         setData(res.data);
-        console.log(Data);
+        // console.log(Data);
 
         if (res.data.status == "0") {
           navigate("/ParkingFee/" + Log);
@@ -92,17 +93,7 @@ function DetailCarpark() {
 
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://punnspaces.com/",
-          label: "PUNN | Smart Workspace",
-          color: "info",
-        }}
-        transparent
-        light
-      />
+      <DefaultNavbar routes={routes} transparent light />
       <MKBox
         position="absolute"
         top={0}

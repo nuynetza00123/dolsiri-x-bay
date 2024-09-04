@@ -37,10 +37,10 @@ function DetailCarpark() {
   // const [rememberMe, setRememberMe] = useState(false);
   const location = useLocation();
   const navigate = useNavigate("");
-  console.log(location.pathname);
+  // console.log(location.pathname);
   const words = location.pathname.split("/");
 
-  console.log(words[words.length - 1]);
+  // console.log(words[words.length - 1]);
 
   const [show, setshow] = useState(false);
   const [LogCarpark, setLogCarpark] = useState("");
@@ -55,7 +55,7 @@ function DetailCarpark() {
     getParkingDetail(words[words.length - 1]);
   }, []);
 
-  console.log(Data);
+  // console.log(Data);
 
   const styles = StyleSheet.create({
     container: {
@@ -118,17 +118,7 @@ function DetailCarpark() {
 
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://punnspaces.com/",
-          label: "PUNN | Smart Workspace",
-          color: "info",
-        }}
-        transparent
-        light
-      />
+      <DefaultNavbar routes={routes} transparent light />
       <MKBox
         position="absolute"
         top={0}
