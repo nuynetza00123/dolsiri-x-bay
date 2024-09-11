@@ -100,13 +100,14 @@ function DetailCarpark() {
           }));
           setshow(true);
           setLogCarpark(Log);
-        } else if (Data.status == "1") {
+        } else if (res.data.status == "1") {
           Swal.fire({
-            title: Data.message,
+            title: res.data.message,
             icon: "error",
             confirmButtonText: "Close",
           });
           setLogCarpark("");
+          navigate("/Detail");
         }
 
         // console.log(res.data);
