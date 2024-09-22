@@ -92,14 +92,70 @@ function DetailCarpark() {
       .post(`Redemption/GetParkingDetail`, tempdata)
       .then(function (res) {
         if (res.data.status == "0") {
-          // setData(res.data.data[0]);
+          if (
+            res.data.data[0].plateNo.includes("unknown") ||
+            res.data.data[0].plateNo.includes("0000")
+          ) {
+            Swal.fire({
+              title: "กรุณากรอกทะเบียนรถ",
+              input: "text",
+              showCancelButton: false,
+              allowOutsideClick: false,
+            }).then((result) => {
+              if (result.value != "") {
+                savePlateNo(Log, result.value);
+              } else {
+                window.location.reload();
+              }
+            });
+          } else {
+            setshow(true);
+            setLogCarpark(Log);
+          }
 
           setData((Data) => ({
             Data,
             ...res.data.data[0],
           }));
-          setshow(true);
+          // setshow(true);
           setLogCarpark(Log);
+        } else if (res.data.status == "1") {
+          Swal.fire({
+            title: res.data.message,
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+          setLogCarpark("");
+          navigate("/Detail");
+        }
+
+        // console.log(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const savePlateNo = (Log, plateNo) => {
+    // let data = { ...Data };
+    let tempdata = {
+      logCarpark: Log,
+      license: plateNo,
+    };
+
+    api
+      .post(`Payment/updateLicensePlate`, tempdata)
+      .then(function (res) {
+        if (res.data.status == "0") {
+          getParkingDetail(Log);
+          Swal.fire({
+            icon: "success",
+            title: "บันทึกทะเบียนเรียบร้อย",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // setshow(true);
+          // setLogCarpark(Log);
         } else if (res.data.status == "1") {
           Swal.fire({
             title: res.data.message,
